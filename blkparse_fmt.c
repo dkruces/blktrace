@@ -382,9 +382,18 @@ static void process_default(char *act, struct per_cpu_info *pci,
 						name);
 			} else {
 				if (t_sec(t))
-					fprintf(ofp, "%llu + %u [%s]\n",
-						(unsigned long long) t->sector,
-						t_sec(t), name);
+					if (!t->alignment)
+						fprintf(ofp, "%llu + %u [%s]\n",
+							(unsigned long long)
+								t->sector,
+							t_sec(t), name);
+					else
+						fprintf(ofp,
+							"%llu + %u |%d| [%s]\n",
+							(unsigned long long)
+								t->sector,
+							t_sec(t), t->alignment,
+							name);
 				else
 					fprintf(ofp, "[%s]\n", name);
 			}
